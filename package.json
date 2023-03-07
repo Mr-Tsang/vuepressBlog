@@ -1,0 +1,36 @@
+{
+  "name": "vuepress-blog",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "dev": "vuepress dev docs",
+    "build": "vuepress build docs",
+    "deploy": "bash deploy.sh"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "ant-design-vue": "^1.7.8",
+    "element-ui": "^2.15.6",
+    "markdown-it-container": "^3.0.0",
+    "vuepress": "^1.9.9",
+    "vuepress-plugin-demo-container": "^0.2.0",
+    "@vuepress/plugin-back-to-top": "^1.5.4",
+    "@vuepress/plugin-last-updated": "^1.5.4",
+    "@vuepress/plugin-nprogress": "^1.5.4",
+    "@vuepress/plugin-search": "^1.5.4",
+    "chalk": "^4.1.0",
+    "commander": "^8.2.0",
+    "font-awesome": "^4.7.0",
+    "log-symbols": "^4.0.0",
+    "sass": "^1.26.10",
+    "sass-loader": "^10.0.2",
+    "valine": "^1.4.14",
+    "vuepress-plugin-container": "^2.1.5"
+  }
+}
