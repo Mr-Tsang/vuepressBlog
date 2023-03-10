@@ -1,163 +1,350 @@
 <template>
-  <main class="home" :aria-labelledby="data.heroText !== null ? 'main-title' : null">
-    <div>我是首页，支持自定义🌝🌝🌝</div>
-  </main>
-</template>
+    <div class="home-page" ref="main">
+        <div class="blog-home-background" :style="{ 'background-image': `url('${$themeConfig.background}')` }"></div>
+        <div class="blog-home">
+            <div class="home-content">
+                <div class="blog-description">
+                    <h1>{{ $page.frontmatter.heroText }}</h1>
+                    <p>风华正茂 恰同学少年</p>
+                </div>
+            </div>
+            <drop-down></drop-down>
+            <div class="cloud">
+                <svg class="waves" viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto">
+                    <defs>
+                        <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z"
+                            fill="white"></path>
+                    </defs>
+                    <g class="parallax">
+                        <use xlink:href="#gentle-wave" x="48" y="0" opacity="0.7">
+                            <path id="gentle-wave"
+                                d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" fill="white">
+                            </path>
+                        </use>
+                        <use xlink:href="#gentle-wave" x="48" y="3" opacity="0.5">
+                            <path id="gentle-wave"
+                                d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" fill="white">
+                            </path>
+                        </use>
+                        <use xlink:href="#gentle-wave" x="48" y="5" opacity="0.3">
+                            <path id="gentle-wave"
+                                d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" fill="white">
+                            </path>
+                        </use>
+                        <use xlink:href="#gentle-wave" x="48" y="7">
+                            <path id="gentle-wave"
+                                d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" fill="white">
+                            </path>
+                        </use>
+                    </g>
+                </svg>
+            </div>
+        </div>
+        <div class="blog-articles">
+            <blog-articles :pageNumber="pageNumber" :filted="$sortedPages" path="page"></blog-articles>
+        </div>
+        <div v-if="data.footer" class="footer">
+            {{ data.footer }}
+        </div>
 
+        <Content v-else slot-key="footer" class="footer" />
+    </div>
+</template>
+  
 <script>
-import NavLink from "@theme/components/NavLink.vue";
+import BlogArticles from "@theme/components/BlogArticles";
+import DropDown from "@theme/components/DropDown";
 
 export default {
-  name: "Home",
-  components: { NavLink },
-  computed: {
+    name: 'Home',
+
+    components: { BlogArticles, DropDown },
+
+    props: ["pageNumber"],
     data() {
-      return this.$page.frontmatter;
+        return {
+            main: null,
+            scrollOffset: 0,
+            mouseEvent: "",
+            inSlides: true,
+            interval: null,
+            slidesLock: false,
+        };
     },
+    computed: {
+        data() {
+            return this.$page.frontmatter
+        },
+    },
+    methods: {
+        bindEvent() {
+            this.main = this.$refs.main;
+            this.mouseEvent =
+                document.onmousewheel !== undefined ? "mousewheel" : "DOMMouseScroll";
 
-    actionLink() {
-      return {
-        link: this.data.actionLink,
-        text: this.data.actionText
-      };
-    }
-  }
-};
+            if (this.mouseEvent == "mousewheel") {
+                this.main.addEventListener(
+                    "mousewheel",
+                    (e) => {
+                        let y = -0.83 * e.wheelDelta;
+                        this.onMouseWheel(e, y);
+                    },
+                    false
+                );
+            } else if (this.mouseEvent == "DOMMouseScroll") {
+                this.main.addEventListener(
+                    "DOMMouseScroll",
+                    (e) => {
+                        this.onMouseWheel(e, e.detail);
+                    },
+                    false
+                );
+                this.main.addEventListener(
+                    "MozMousePixelScroll",
+                    (e) => {
+                        this.onMouseWheel(e, e.detail);
+                    },
+                    false
+                );
+            } else {
+                this.main.addEventListener(
+                    this.mouseEvent,
+                    (e) => {
+                        let y = e.deltaY;
+                        if (e.deltaMode == 1) {
+                            y = e.deltaY * 32;
+                        }
+                        this.onMouseWheel(e, y);
+                    },
+                    false
+                );
+            }
+        },
+        onMouseWheel(e, deltaY) {
+            let event = e || window.event;
+            let offset = this.main.getBoundingClientRect().top;
+
+            if (!this.ifInSlide(deltaY, offset)) return;
+
+            this.scrollOffset =
+                document.documentElement.scrollTop || document.body.scrollTop;
+
+            // if (event.preventDefault) {
+            //   event.preventDefault();
+            //   event.stopPropagation();
+            // } else if (document.all) {
+            //   event.cancelBubble = true;
+            //   event.returnValue = false;
+            // } else {
+            //   event.stopPropagation();
+            // }
+
+            if (
+                (window.location.pathname != "/" || this.slidesLock) &&
+                window.location.pathname.split("/")[1] != "page"
+            )
+                return;
+
+            // this.slidesLock = true;
+
+            this.doScroll(deltaY);
+        },
+        doScroll(deltaY) {
+            let header = document.querySelector(".navbar");
+            let home = document.querySelector(".blog-home");
+            if (deltaY > 0) {
+                // window.scrollTo(0, home.scrollHeight);
+                header.classList.remove("hide");
+            } else {
+                // window.scrollTo(0, 0);
+                header.classList.add("hide");
+            }
+
+            // this.interval = setTimeout(() => {
+            //   this.slidesLock = false;
+            // }, 500);
+        },
+        ifInSlide(deltaY, offset) {
+            let home = document.querySelector(".blog-home");
+            return deltaY > 0
+                ? -offset < home.offsetHeight - 1
+                : -offset <= home.scrollHeight + 80;
+        },
+        mobileScroll() {
+            if (window.location.pathname != "/") {
+                return;
+            }
+            let container = document.querySelector('.home-page')
+            let header = document.querySelector(".navbar");
+            let home = document.querySelector(".blog-home");
+            let scrolled = container.scrollTop
+
+            if (scrolled <= home.scrollHeight - 120) {
+                header.classList.add("hide");
+            } else {
+                header.classList.remove("hide");
+            }
+            return false;
+        },
+        hideHeader() {
+            if (this.$route.path === '/') {
+                const header = document.querySelector(".navbar");
+                header.classList.add("hide");
+            }
+        }
+    },
+    mounted() {
+        let top = document.querySelector(".global-ui");
+
+        top.addEventListener("click", this.hideHeader);
+
+        this.$nextTick(() => {
+            let main = this.$refs.main;
+            main.addEventListener("touchmove", this.mobileScroll, false);
+            this.bindEvent();
+        });
+    },
+}
 </script>
+  
+<style lang="scss" scoped>
+@import "../styles/values.scss";
 
-<style lang="stylus">
-.home {
-  padding: $navbarHeight 2rem 0;
-  max-width: $homePageWidth;
-  margin: 0px auto;
-  display: block;
+.blog-home-background {
+    content: "";
+    width: 100%;
+    height: 100vh;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center top;
+    filter: brightness(80%);
+    position: absolute;
+    top: 0;
+    left: 0;
+}
 
-  .hero {
-    text-align: center;
+.blog-home {
+    @extend .flex;
+    width: 100%;
+    height: $container-height;
+    position: relative;
+}
 
-    img {
-      max-width: 100%;
-      max-height: 280px;
-      display: block;
-      margin: 3rem auto 1.5rem;
-    }
+.home-content {
+    @extend .flex-column;
+}
+
+.blog-description {
+    @extend .flex-column;
+    margin-top: 150px;
 
     h1 {
-      font-size: 3rem;
-    }
-
-    h1, .description, .action {
-      margin: 1.8rem auto;
-    }
-
-    .description {
-      max-width: 35rem;
-      font-size: 1.6rem;
-      line-height: 1.3;
-      color: lighten($textColor, 40%);
-    }
-
-    .action-button {
-      display: inline-block;
-      font-size: 1.2rem;
-      color: #fff;
-      background-color: $accentColor;
-      padding: 0.8rem 1.6rem;
-      border-radius: 4px;
-      transition: background-color 0.1s ease;
-      box-sizing: border-box;
-      border-bottom: 1px solid darken($accentColor, 10%);
-
-      &:hover {
-        background-color: lighten($accentColor, 10%);
-      }
-    }
-  }
-
-  .features {
-    border-top: 1px solid $borderColor;
-    padding: 1.2rem 0;
-    margin-top: 2.5rem;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: flex-start;
-    align-content: stretch;
-    justify-content: space-between;
-  }
-
-  .feature {
-    flex-grow: 1;
-    flex-basis: 30%;
-    max-width: 30%;
-
-    h2 {
-      font-size: 1.4rem;
-      font-weight: 500;
-      border-bottom: none;
-      padding-bottom: 0;
-      color: lighten($textColor, 10%);
+        font-size: 46px;
+        color: rgb(148, 188, 218);
     }
 
     p {
-      color: lighten($textColor, 25%);
+        color: rgb(209, 209, 209);
+        text-align: center;
+        line-height: 26px;
     }
-  }
-
-  .footer {
-    padding: 2.5rem;
-    border-top: 1px solid $borderColor;
-    text-align: center;
-    color: lighten($textColor, 25%);
-  }
 }
 
-@media (max-width: $MQMobile) {
-  .home {
-    .features {
-      flex-direction: column;
-    }
-
-    .feature {
-      max-width: 100%;
-      padding: 0 2.5rem;
-    }
-  }
+.blog-articles {
+    margin-top: 5rem;
 }
 
-@media (max-width: $MQMobileNarrow) {
-  .home {
-    padding-left: 1.5rem;
-    padding-right: 1.5rem;
+@media screen and (max-width: 768px) {
+    .home-page {
+        width: 100vw;
+        height: $container-height;
+        overflow: scroll;
+        scroll-snap-type: y mandatory;
+        scroll-padding: 60px;
 
-    .hero {
-      img {
-        max-height: 210px;
-        margin: 2rem auto 1.2rem;
-      }
-
-      h1 {
-        font-size: 2rem;
-      }
-
-      h1, .description, .action {
-        margin: 1.2rem auto;
-      }
-
-      .description {
-        font-size: 1.2rem;
-      }
-
-      .action-button {
-        font-size: 1rem;
-        padding: 0.6rem 1.2rem;
-      }
+        &::-webkit-scrollbar {
+            width: 0;
+            height: 0;
+        }
     }
 
-    .feature {
-      h2 {
-        font-size: 1.25rem;
-      }
+    .blog-home,
+    .blog-articles {
+        scroll-snap-align: start;
     }
-  }
+
+    .blog-description {
+        margin-top: 80px !important;
+
+        p {
+            width: 80%;
+        }
+    }
+}
+
+@media screen and (max-width: 320px) {
+    .blog-description h1 {
+        font-size: 40px;
+    }
+}
+
+.cloud {
+    display: flex;
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: $cloud-z-index;
+    box-sizing: border-box;
+    mix-blend-mode: overlay;
+
+    .waves {
+        display: flex;
+        position: relative;
+        width: 100%;
+        height: 100px;
+
+        @media (max-width: 768px) {
+            height: 40px;
+        }
+    }
+
+    .parallax {
+        >use {
+            animation: move-forever 25s cubic-bezier(0.55, 0.5, 0.45, 0.5) infinite;
+        }
+
+        >use:nth-child(1) {
+            animation-delay: -2s;
+            animation-duration: 7s;
+        }
+
+        >use:nth-child(2) {
+            animation-delay: -3s;
+            animation-duration: 10s;
+        }
+
+        >use:nth-child(3) {
+            animation-delay: -4s;
+            animation-duration: 13s;
+        }
+
+        >use:nth-child(4) {
+            animation-delay: -5s;
+            animation-duration: 20s;
+        }
+    }
+}
+
+@keyframes move-forever {
+    0% {
+        transform: translate3d(-90px, 0, 0);
+    }
+
+    100% {
+        transform: translate3d(85px, 0, 0);
+    }
 }
 </style>
+  

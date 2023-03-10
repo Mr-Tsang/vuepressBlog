@@ -182,6 +182,7 @@ export function groupHeaders (headers) {
   return headers.filter(h => h.level === 2)
 }
 
+// 给nav加type
 export function resolveNavLinkItem (linkItem) {
   return Object.assign(linkItem, {
     type: linkItem.items && linkItem.items.length ? 'links' : 'link'
@@ -241,4 +242,19 @@ function resolveItem (item, pages, base, groupDepth = 1) {
       collapsable: item.collapsable !== false
     }
   }
+}
+
+
+export function compareDate(a, b) {
+  return (new Date(b.frontmatter.postTime) - new Date(a.frontmatter.postTime))
+}
+
+export function parsePage(pages, now) {
+  const result = []
+  pages.forEach(page => {
+      if (page.path.split('/')[1] == now.split('/')[1]) {
+          result.push(page.path)
+      }
+  });
+  return result
 }

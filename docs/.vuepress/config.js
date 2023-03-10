@@ -3,10 +3,10 @@
 */
 
 module.exports = {
-    title: "Web Blog",
+    title: "水滴石穿",
     description: "前端工程师的进阶之路",
     head: [ // 注入到当前页面的 HTML <head> 中的标签
-        ['link', { rel: 'icon', href: '/images/photo.jpg' }],
+        ['link', { rel: 'icon', href: '/images/icon.png' }],
         ['meta', { charset: "UTF-8" }],
         ['meta', { 'http-quiv': 'X-UA-Compatible', cotent: 'IE=edge' }],
         ['meta', { name: "viewport", content: "width=device-width, initial-scale=1.0" }]
@@ -22,7 +22,10 @@ module.exports = {
         }
     },
     themeConfig: {
+        logo: '/images/logo.jpeg',
+        // background: "/images/bg.jpeg",
         nav: [ //导航栏配置
+            { text: '首页', link: '/' },
             { text: '指南', link: '/source/guide/introduce.html' },
             { text: '前端基础', link: '/source/base/1.html' },
             { text: '案例', link: '/source/advanced/1.html' },
@@ -99,7 +102,26 @@ module.exports = {
                     ]
                 }
             ]
-        }
+        },
+        footer: {
+            // 页脚信息
+            createYear: 2019, // 博客创建年份
+            currentYear: new Date().getFullYear(), // 当前年份
+            beian: {
+                link: 'https://beian.miit.gov.cn/#/Integrated/index',
+                context: '闽ICP备2021005292号-1'
+            },
+            copyrightInfo: 'MIT Licensed | Copyright © 2020-present Vivek',
+            // 服务提供商信息，支持html标签
+            // TODO: 拼写错误
+            surpport: ` <span>本网站由</span>
+                        <a href="https://www.upyun.com/" target="_blank" rel="noopener noreferrer">
+                            <img height="30px"
+                                src="https://cdn.jsdelivr.net/gh/eddievandeer/eddievandeer.github.io/docs/.vuepress/public/assets/img/upyun-logo.png"
+                                alt="">
+                        </a>
+                        <span>提供 <b>CDN</b> 加速</span>`,
+        },
     },
     // 使用依赖项中的插件
     plugins: [
@@ -111,5 +133,12 @@ module.exports = {
     // alias设置别名：解决Cannot find module 'core-js/library/fn/xxx/xxx'问题
     alias: {
         'core-js/library/fn': 'core-js/features'
-    }
+    },
+    //github的配置
+    // repo: 'Mr-Tsang',
+    // repoLabel: 'Github',
+    // docsDir: 'docs',
+    // docsBranch: 'main',
+    // editLinks: true,
+    // editLinkText: 'Edit this page',
 };

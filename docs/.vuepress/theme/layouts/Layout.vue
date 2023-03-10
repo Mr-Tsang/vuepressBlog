@@ -1,14 +1,11 @@
 <template>
-    <div
-        class="theme-container"
-        :class="pageClasses"
-        @touchstart="onTouchStart"
-        @touchend="onTouchEnd"
-    >
+    <div class="theme-container" :class="pageClasses" @touchstart="onTouchStart" @touchend="onTouchEnd">
+        <!-- 头部导航栏 -->
         <Navbar v-if="shouldShowNavbar" @toggle-sidebar="toggleSidebar" />
 
+        <!-- mobile-侧边栏遮罩层，点击，侧边栏隐藏 -->
         <div class="sidebar-mask" @click="toggleSidebar(false)" />
-
+        <!-- 侧边栏 -->
         <Sidebar :items="sidebarItems" @toggle-sidebar="toggleSidebar">
             <template #top>
                 <slot name="sidebar-top" />
@@ -17,8 +14,19 @@
                 <slot name="sidebar-bottom" />
             </template>
         </Sidebar>
+
+        <!-- 首页 -->
         <Home v-if="$page.frontmatter.home" />
 
+        <!-- 特殊页 -->
+        <template v-else-if="specialPage()">
+            <blog-category v-if="$route.params.category" :category="$route.params.category" :child="$route.params.child"
+                :pageNumber="$route.params.pageNumber || 1"></blog-category>
+            <blog-articles v-else :pageNumber="$route.params.pageNumber || 1" :filted="$listPages"
+                :path="`${this.$route.path.split('/')[1]}${this.$route.path.split('/')[1] !== 'page' ? '/' + this.$route.path.split('/')[2] : ''}`"></blog-articles>
+        </template>
+
+        <!-- 文章页 -->
         <Page v-else :sidebar-items="sidebarItems">
             <template #top>
                 <slot name="page-top" />
@@ -32,11 +40,12 @@
 
 <script>
 // 自定义主题
-// import Home from "@theme/components/Home.vue";
-import Home from "@parent-theme/components/Home.vue";
-import Navbar from "@parent-theme/components/Navbar.vue";
-import Page from "@parent-theme/components/Page.vue";
-import Sidebar from "@parent-theme/components/Sidebar.vue";
+import Home from "@theme/components/Home.vue";
+import Navbar from "@theme/components/Navbar.vue";
+import Page from "@theme/components/Page.vue";
+import Sidebar from "@theme/components/Sidebar.vue";
+import BlogArticles from "@theme/components/BlogArticles.vue";
+import BlogCategory from "@theme/components/Category";
 import { resolveSidebarItems } from "../util";
 
 export default {
@@ -46,7 +55,9 @@ export default {
         Home,
         Page,
         Sidebar,
-        Navbar
+        Navbar,
+        BlogArticles,
+        BlogCategory,
     },
 
     data() {
@@ -106,9 +117,14 @@ export default {
         this.$router.afterEach(() => {
             this.isSidebarOpen = false;
         });
+        console.log(this.$page.frontmatter);
     },
 
     methods: {
+        specialPage() {
+            return Object.getOwnPropertyNames(this.$page.frontmatter).length === 0;
+        },
+
         toggleSidebar(to) {
             this.isSidebarOpen =
                 typeof to === "boolean" ? to : !this.isSidebarOpen;
