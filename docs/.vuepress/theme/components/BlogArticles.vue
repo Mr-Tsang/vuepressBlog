@@ -16,8 +16,10 @@
                 </div>
                 <article-footer :page="page"></article-footer>
             </div>
-            <page-controller :pageSize="pageSize" :total="total" :current-page="pageNumber"
-                @page-change="handlePageChange($event)"></page-controller>
+            <div class="pagination-wrap">
+                <el-pagination layout="prev, pager, next" :page-size="pageSize" :current-page="Number(pageNumber)"
+                    @current-change="handlePageChange" :total="total" background></el-pagination>
+            </div>
         </div>
     </keep-alive>
 </template>
@@ -58,9 +60,7 @@ export default {
                 this.$router.push('/404')
             }
         },
-        handlePageChange({
-            pageNumber
-        }) {
+        handlePageChange(pageNumber) {
             this.$router.push({
                 path: !this.path ?
                     `/${window.location.pathname.split('/')[1]}/page/${pageNumber}` :

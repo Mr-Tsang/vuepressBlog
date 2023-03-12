@@ -1,10 +1,7 @@
+<!-- 代码预览组件 -->
 <template>
-  <div
-    class="demo-block"
-    :class="[blockClass, { 'hover': hovering }]"
-    @mouseenter="hovering = true"
-    @mouseleave="hovering = false"
-  >
+  <div class="demo-block" :class="[blockClass, { 'hover': hovering }]" @mouseenter="hovering = true"
+    @mouseleave="hovering = false">
     <div class="demo-content">
       <!-- 插入组件 -->
       <slot name="demo"></slot>
@@ -19,24 +16,17 @@
         <slot name="source"></slot>
       </div>
     </div>
-    <div
-      class="demo-block-control"
-      :class="{ 'is-fixed': fixedControl }"
-      :style="{ 'width': fixedControl ? `${codeContentWidth}px` : 'unset' }"
-      ref="control"
-      @click="isExpanded = !isExpanded"
-    >
+    <div class="demo-block-control" :class="{ 'is-fixed': fixedControl }"
+      :style="{ 'width': fixedControl ? `${codeContentWidth}px` : 'unset' }" ref="control"
+      @click="isExpanded = !isExpanded">
       <transition name="arrow-slide">
         <i :class="[iconClass, { 'hovering': hovering }, 'icon']"></i>
       </transition>
       <transition name="text-slide">
         <span v-show="hovering">{{ controlText }}</span>
       </transition>
-      <span
-        v-show="!copied"
-        :class="['copy-action', { 'copying ': copied }]"
-        @click.stop="copyCode"
-      >{{ copiedText }}</span>
+      <span v-show="!copied" :class="['copy-action', { 'copying ': copied }]" @click.stop="copyCode">{{ copiedText
+      }}</span>
       <transition name="bounce">
         <span v-show="copied" class="copy-action copy-action-success">{{ copiedText }}</span>
       </transition>
@@ -177,27 +167,47 @@ export default {
   }
 };
 </script>
-<style scope>
+<style lang="scss" scoped>
 .demo-block {
   border: solid 1px #ebebeb;
   border-radius: 3px;
   transition: 0.2s;
   margin-top: 15px;
   margin-bottom: 15px;
+
+  /* 代码样式 */
+  div[class*="language-"] {
+    background-color: #fafafa;
+  }
 }
+
+@media screen and (max-width: 768px) {
+  .demo-block {
+
+    /* 代码样式 */
+    div[class*="language-"] {
+      padding: 1.25rem 1.5rem;
+    }
+  }
+}
+
 .demo-block.hover {
   box-shadow: 0 0 8px 0 rgba(232, 237, 250, 0.6),
     0 2px 4px 0 rgba(232, 237, 250, 0.5);
 }
+
 .demo-block code {
   font-family: Menlo, Monaco, Consolas, Courier, monospace;
 }
+
 .demo-block .demo-button {
   float: right;
 }
+
 .demo-block .demo-content {
   padding: 24px;
 }
+
 .demo-block .meta {
   background-color: #fafafa;
   border-top: 1px solid #eaeefb;
@@ -205,6 +215,7 @@ export default {
   height: 0;
   transition: height 0.2s;
 }
+
 .demo-block .description {
   padding: 20px;
   box-sizing: border-box;
@@ -217,6 +228,7 @@ export default {
   margin: 10px;
   background-color: #fff;
 }
+
 .demo-block .demo-block-control {
   border-top: solid 1px #eaeefb;
   height: 44px;
@@ -230,12 +242,14 @@ export default {
   cursor: pointer;
   position: relative;
 }
+
 .demo-block .demo-block-control.is-fixed {
   position: fixed;
   bottom: 0;
   width: 660px;
   z-index: 999;
 }
+
 .demo-block .demo-block-control .icon {
   font-family: element-icons !important;
   font-style: normal;
@@ -247,6 +261,7 @@ export default {
   display: inline-block;
   -webkit-font-smoothing: antialiased;
 }
+
 .demo-block .demo-block-control .caret-top::before {
   content: "";
   position: absolute;
@@ -257,6 +272,7 @@ export default {
   border-right: 6px solid transparent;
   border-left: 6px solid transparent;
 }
+
 .demo-block .demo-block-control .caret-bottom::before {
   content: "";
   position: absolute;
@@ -267,15 +283,18 @@ export default {
   border-right: 6px solid transparent;
   border-left: 6px solid transparent;
 }
+
 .demo-block .demo-block-control i {
   font-size: 16px;
   line-height: 44px;
   transition: 0.3s;
 }
+
 .demo-block .demo-block-control i.hovering {
   transform: translateX(-40px);
 }
-.demo-block .demo-block-control > span {
+
+.demo-block .demo-block-control>span {
   position: absolute;
   transform: translateX(-30px);
   font-size: 14px;
@@ -283,39 +302,49 @@ export default {
   transition: 0.3s;
   display: inline-block;
 }
+
 .demo-block .demo-block-control .copy-action {
   right: 0px;
   color: #409eff;
 }
+
 .demo-block .demo-block-control.copying {
   transform: translateX(-44px);
 }
+
 .demo-block .demo-block-control .copy-action-success {
   color: #f5222d;
 }
+
 .demo-block .demo-block-control:hover {
   color: #409eff;
   background-color: #f9fafc;
 }
+
 .demo-block .demo-block-control .text-slide-enter,
 .demo-block .demo-block-control .text-slide-leave-active {
   opacity: 0;
   transform: translateX(10px);
 }
+
 .demo-block .demo-block-control .bounce-enter-active {
   animation: bounce-in 0.5s;
 }
+
 @keyframes bounce-in {
   0% {
     transform: scale(0);
   }
+
   50% {
     transform: scale(1.5);
   }
+
   100% {
     transform: scale(1);
   }
 }
+
 .demo-block .demo-block-control .control-button {
   line-height: 26px;
   position: absolute;
@@ -326,10 +355,6 @@ export default {
   padding-right: 25px;
 }
 
-/* 代码样式 */
-div[class*="language-"] {
-  background-color: #fafafa;
-}
 .token.tag,
 .token.attr-name,
 .token.namespace,
@@ -342,6 +367,7 @@ div[class*="language-"] {
 .token.builtin {
   color: #3182bd;
 }
+
 .token.string,
 .token.char,
 .token.attr-value,
@@ -349,11 +375,13 @@ div[class*="language-"] {
 .token.variable {
   color: #756bb1;
 }
+
 .theme-default-content pre code,
 .theme-default-content pre[class*="language-"] code {
   color: #000;
   font-family: Menlo, Monaco, Consolas, Courier, monospace;
 }
+
 .token.function,
 .token.operator,
 .token.entity,
@@ -362,16 +390,19 @@ div[class*="language-"] {
 .token.language-css .token.punctuation {
   color: #000;
 }
+
 .theme-default-content pre,
 .theme-default-content pre[class*="language-"] {
   line-height: 1.8;
   font-size: 12px;
 }
+
 .token.boolean,
 .token.number,
 .token.language-css {
   color: #31a354;
 }
+
 .token.property,
 .token.class-name,
 .token.constant,

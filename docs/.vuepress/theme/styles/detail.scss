@@ -4,7 +4,7 @@
       min-height: calc(100vh - 200px);
       @extend .flex-column;
       justify-content: space-between;
-      margin: 50px 0;
+      margin: 4.2rem 0 0;
 }
 
 .article-item {
@@ -128,7 +128,7 @@
 
 @media screen and (max-width: 1024px) {
       .article-list {
-            margin-bottom: 20px;
+            margin-bottom: 10px;
       }
 
       .article-item {

@@ -199,5 +199,31 @@ th, td
 
     .page
       padding-left 0
+  .home-nav .navbar
+    background transparent
+    border-bottom none
+    .site-name
+      color #cfd4db
+    .links
+      background-color transparent
+      .search-box input
+        background-color transparent
+      .nav-item .nav-link
+        color #cfd4db
+      .nav-item  
+        .dropdown-wrapper .title
+          color #cfd4db
+        .nav-dropdown .nav-link
+          color inherit
+      .nav-links a
+        &:hover, &.router-link-active
+          color #cfd4db
+      .nav-links .nav-dropdown a
+        &:hover, &.router-link-active
+          color $accentColor
+  .page-controller
+    background-color #fff
+  .page-left
+    padding-bottom: 0.6rem;
 
 @require 'mobile.styl'

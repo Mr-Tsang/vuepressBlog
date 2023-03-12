@@ -12,7 +12,7 @@ export default {
       default: 'top'
     }
   },
-  render (h, { props, slots }) {
+  render(h, { props, slots }) {
     return h('span', {
       class: ['badge', props.type],
       style: {

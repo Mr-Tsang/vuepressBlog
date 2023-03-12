@@ -1,9 +1,3 @@
-// import ArticleList from './layouts/ArticleList.vue'
-// import Category from './layouts/Category.vue'
-// import Tag from './layouts/Tag.vue'
-// import blogHome from './components/blogHome.vue'
-// import Layout from './layouts/Layout.vue'
-
 export function countCategories(page, siteCategories) {
     let key, childCategory = null
 

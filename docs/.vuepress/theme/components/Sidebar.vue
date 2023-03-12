@@ -1,33 +1,30 @@
 <template>
-    <aside class="sidebar">
-      <!-- mobile-nav导航栏 -->
-      <NavLinks />
+  <aside class="sidebar">
+    <!-- mobile-nav导航栏 -->
+    <NavLinks />
+
+    <slot name="top" />
+
+    <!-- 侧边栏 -->
+    <SidebarLinks :depth="0" :items="items" />
+    <slot name="bottom" />
+  </aside>
+</template>
   
-      <slot name="top" />
-      
-      <!-- 侧边栏 -->
-      <SidebarLinks
-        :depth="0"
-        :items="items"
-      />
-      <slot name="bottom" />
-    </aside>
-  </template>
+<script>
+import SidebarLinks from '@theme/components/SidebarLinks.vue'
+import NavLinks from '@theme/components/NavLinks.vue'
+
+export default {
+  name: 'Sidebar',
+
+  components: { SidebarLinks, NavLinks },
+
+  props: ['items']
+}
+</script>
   
-  <script>
-  import SidebarLinks from '@theme/components/SidebarLinks.vue'
-  import NavLinks from '@theme/components/NavLinks.vue'
-  
-  export default {
-    name: 'Sidebar',
-  
-    components: { SidebarLinks, NavLinks },
-  
-    props: ['items']
-  }
-  </script>
-  
-  <style lang="stylus">
+<style lang="stylus">
   .sidebar
     ul
       padding 0

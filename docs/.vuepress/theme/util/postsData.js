@@ -9,13 +9,13 @@ export function sortPostsByDate(posts) {
 export function sortPostsByStickyAndDate(posts) {
     return posts.sort((pre, next) => {
         const preSticky = pre.frontmatter.sticky,
-              nextSticky = next.frontmatter.sticky
+            nextSticky = next.frontmatter.sticky
 
-        if(preSticky && nextSticky) {
+        if (preSticky && nextSticky) {
             return compareDate(pre, next)
-        } else if(preSticky && !nextSticky) {
+        } else if (preSticky && !nextSticky) {
             return -1
-        } else if(!preSticky && nextSticky) {
+        } else if (!preSticky && nextSticky) {
             return 1
         }
         return compareDate(pre, next)

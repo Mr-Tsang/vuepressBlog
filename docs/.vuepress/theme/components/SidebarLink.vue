@@ -6,7 +6,7 @@ export default {
 
   props: ['item', 'sidebarDepth'],
 
-  render (h,
+  render(h,
     {
       parent: {
         $page,
@@ -54,7 +54,7 @@ export default {
   }
 }
 
-function renderLink (h, to, text, active, level) {
+function renderLink(h, to, text, active, level) {
   const component = {
     props: {
       to,
@@ -76,7 +76,7 @@ function renderLink (h, to, text, active, level) {
   return h('RouterLink', component, text)
 }
 
-function renderChildren (h, children, path, route, maxDepth, depth = 1) {
+function renderChildren(h, children, path, route, maxDepth, depth = 1) {
   if (!children || depth > maxDepth) return null
   return h('ul', { class: 'sidebar-sub-headers' }, children.map(c => {
     const active = isActive(route, path + '#' + c.slug)
@@ -87,7 +87,7 @@ function renderChildren (h, children, path, route, maxDepth, depth = 1) {
   }))
 }
 
-function renderExternal (h, to, text) {
+function renderExternal(h, to, text) {
   return h('a', {
     attrs: {
       href: to,

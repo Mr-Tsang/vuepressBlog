@@ -5,7 +5,7 @@
             <div class="home-content">
                 <div class="blog-description">
                     <h1>{{ $page.frontmatter.heroText }}</h1>
-                    <p>风华正茂 恰同学少年</p>
+                    <p>“忘记”是人类学习最大的敌人之一，而“积累”，恰恰是解决掉这一敌人最好的方法。</p>
                 </div>
             </div>
             <drop-down></drop-down>
@@ -43,11 +43,8 @@
         <div class="blog-articles">
             <blog-articles :pageNumber="pageNumber" :filted="$sortedPages" path="page"></blog-articles>
         </div>
-        <div v-if="data.footer" class="footer">
-            {{ data.footer }}
-        </div>
-
-        <Content v-else slot-key="footer" class="footer" />
+        
+        <blog-footer></blog-footer>
     </div>
 </template>
   
@@ -69,6 +66,9 @@ export default {
             inSlides: true,
             interval: null,
             slidesLock: false,
+            blogHome:null,
+            navbar:null,
+            homeWrap:null,
         };
     },
     computed: {
@@ -81,7 +81,6 @@ export default {
             this.main = this.$refs.main;
             this.mouseEvent =
                 document.onmousewheel !== undefined ? "mousewheel" : "DOMMouseScroll";
-
             if (this.mouseEvent == "mousewheel") {
                 this.main.addEventListener(
                     "mousewheel",
@@ -159,7 +158,6 @@ export default {
                 // window.scrollTo(0, 0);
                 header.classList.add("hide");
             }
-
             // this.interval = setTimeout(() => {
             //   this.slidesLock = false;
             // }, 500);
@@ -191,16 +189,28 @@ export default {
                 const header = document.querySelector(".navbar");
                 header.classList.add("hide");
             }
-        }
+        },
+        onScroll(){
+            const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+            if(scrollTop - 3 >= this.blogHome.offsetHeight - this.navbar.offsetHeight){
+                this.homeWrap.classList.remove("home-nav");
+            } else {
+                this.homeWrap.classList.add("home-nav");
+            }
+        },
     },
     mounted() {
         let top = document.querySelector(".global-ui");
-
         top.addEventListener("click", this.hideHeader);
+
+        this.blogHome = document.querySelector(".blog-home-background");
+        this.navbar = document.querySelector(".navbar");
+        this.homeWrap = document.querySelector(".home-wrap");
 
         this.$nextTick(() => {
             let main = this.$refs.main;
             main.addEventListener("touchmove", this.mobileScroll, false);
+            main.addEventListener("mousewheel", this.onScroll, false);
             this.bindEvent();
         });
     },
@@ -258,7 +268,7 @@ export default {
     .home-page {
         width: 100vw;
         height: $container-height;
-        overflow: scroll;
+        // overflow: scroll;
         scroll-snap-type: y mandatory;
         scroll-padding: 60px;
 

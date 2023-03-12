@@ -3,7 +3,7 @@
 */
 
 module.exports = {
-    title: "水滴石穿",
+    title: "跬步千里",
     description: "前端工程师的进阶之路",
     head: [ // 注入到当前页面的 HTML <head> 中的标签
         ['link', { rel: 'icon', href: '/images/icon.png' }],
@@ -23,7 +23,8 @@ module.exports = {
     },
     themeConfig: {
         logo: '/images/logo.jpeg',
-        // background: "/images/bg.jpeg",
+        author:"Mr.Tsang",
+        background: "/images/bg.jpeg",
         nav: [ //导航栏配置
             { text: '首页', link: '/' },
             { text: '指南', link: '/source/guide/introduce.html' },
@@ -105,22 +106,22 @@ module.exports = {
         },
         footer: {
             // 页脚信息
-            createYear: 2019, // 博客创建年份
+            createYear: 2023, // 博客创建年份
             currentYear: new Date().getFullYear(), // 当前年份
-            beian: {
-                link: 'https://beian.miit.gov.cn/#/Integrated/index',
-                context: '闽ICP备2021005292号-1'
-            },
-            copyrightInfo: 'MIT Licensed | Copyright © 2020-present Vivek',
+            // beian: {
+            //     link: 'https://beian.miit.gov.cn/#/Integrated/index',
+            //     context: '闽ICP备2021005292号-1'
+            // },
+            // copyrightInfo: 'MIT Licensed | Copyright © 2020-present Vivek',
             // 服务提供商信息，支持html标签
             // TODO: 拼写错误
-            surpport: ` <span>本网站由</span>
-                        <a href="https://www.upyun.com/" target="_blank" rel="noopener noreferrer">
-                            <img height="30px"
-                                src="https://cdn.jsdelivr.net/gh/eddievandeer/eddievandeer.github.io/docs/.vuepress/public/assets/img/upyun-logo.png"
-                                alt="">
-                        </a>
-                        <span>提供 <b>CDN</b> 加速</span>`,
+            // surpport: ` <span>本网站由</span>
+            //             <a href="https://www.upyun.com/" target="_blank" rel="noopener noreferrer">
+            //                 <img height="30px"
+            //                     src="https://cdn.jsdelivr.net/gh/eddievandeer/eddievandeer.github.io/docs/.vuepress/public/assets/img/upyun-logo.png"
+            //                     alt="">
+            //             </a>
+            //             <span>提供 <b>CDN</b> 加速</span>`,
         },
     },
     // 使用依赖项中的插件

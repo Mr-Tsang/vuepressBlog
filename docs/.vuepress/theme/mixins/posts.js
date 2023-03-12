@@ -7,9 +7,9 @@ export default {
             const { filters } = this.$themeConfig
             let routePath = this.$route.path.split("/")[1]
             let pages = this.$site.pages.filter(page => page.path.endsWith('html'))
-            
+
             return pages.filter(page => {
-                if(filters && filters.length > 0 && routePath == '') {
+                if (filters && filters.length > 0 && routePath == '') {
                     return !filters.includes(page.frontmatter.categories)
                 }
 
@@ -26,7 +26,7 @@ export default {
         $listPages() {
             let routePath = this.$route.path.split("/")[1]
 
-            if(routePath == 'page') return this.$sortedPages
+            if (routePath == 'page') return this.$sortedPages
 
             return this.$sortedPages.filter((page) => page.regularPath.split("/")[1] == routePath)
         },
@@ -41,7 +41,7 @@ export default {
         },
         $tags() {
             const siteTags = new Map()
-            
+
             this.$sortedPages.forEach((page) => {
                 countTags(page, siteTags)
             })

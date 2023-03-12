@@ -3,28 +3,17 @@
     <div class="theme-code-group">
       <div class="theme-code-group__nav">
         <ul class="theme-code-group__ul">
-          <li
-            v-for="(tab, i) in codeTabs"
-            :key="tab.title"
-            class="theme-code-group__li"
-          >
-            <button
-              class="theme-code-group__nav-tab"
-              :class="{
-                'theme-code-group__nav-tab-active': i === activeCodeTabIndex,
-              }"
-              @click="changeCodeTab(i)"
-            >
+          <li v-for="(tab, i) in codeTabs" :key="tab.title" class="theme-code-group__li">
+            <button class="theme-code-group__nav-tab" :class="{
+              'theme-code-group__nav-tab-active': i === activeCodeTabIndex,
+            }" @click="changeCodeTab(i)">
               {{ tab.title }}
             </button>
           </li>
         </ul>
       </div>
       <slot />
-      <pre
-        v-if="codeTabs.length < 1"
-        class="pre-blank"
-      >// Make sure to add code blocks to your code group</pre>
+      <pre v-if="codeTabs.length < 1" class="pre-blank">// Make sure to add code blocks to your code group</pre>
     </div>
   </ClientOnly>
 </template>
@@ -32,25 +21,25 @@
 <script>
 export default {
   name: 'CodeGroup',
-  data () {
+  data() {
     return {
       codeTabs: [],
       activeCodeTabIndex: -1
     }
   },
   watch: {
-    activeCodeTabIndex (index) {
+    activeCodeTabIndex(index) {
       this.activateCodeTab(index)
     }
   },
-  mounted () {
+  mounted() {
     this.loadTabs()
   },
   methods: {
-    changeCodeTab (index) {
+    changeCodeTab(index) {
       this.activeCodeTabIndex = index
     },
-    loadTabs () {
+    loadTabs() {
       this.codeTabs = (this.$slots.default || []).filter(slot => Boolean(slot.componentOptions)).map((slot, index) => {
         if (slot.componentOptions.propsData.active === '') {
           this.activeCodeTabIndex = index
@@ -68,7 +57,7 @@ export default {
 
       this.activateCodeTab(0)
     },
-    activateCodeTab (index) {
+    activateCodeTab(index) {
       this.codeTabs.forEach(tab => {
         if (tab.elm) {
           tab.elm.classList.remove('theme-code-block__active')

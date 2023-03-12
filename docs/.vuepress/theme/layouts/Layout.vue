@@ -1,7 +1,10 @@
 <template>
     <div class="theme-container" :class="pageClasses" @touchstart="onTouchStart" @touchend="onTouchEnd">
         <!-- 头部导航栏 -->
-        <Navbar v-if="shouldShowNavbar" @toggle-sidebar="toggleSidebar" />
+        <div v-if="shouldShowNavbar && $page.frontmatter.home" class="home-nav home-wrap">
+            <Navbar @toggle-sidebar="toggleSidebar" />
+        </div>
+        <Navbar v-if="shouldShowNavbar && !$page.frontmatter.home" @toggle-sidebar="toggleSidebar" />
 
         <!-- mobile-侧边栏遮罩层，点击，侧边栏隐藏 -->
         <div class="sidebar-mask" @click="toggleSidebar(false)" />
@@ -14,27 +17,33 @@
                 <slot name="sidebar-bottom" />
             </template>
         </Sidebar>
+        <div class="theme-container__inner">
+            <!-- 主页 -->
+            <section class="main-container">
+                <!-- 首页 -->
+                <Home v-if="$page.frontmatter.home" />
 
-        <!-- 首页 -->
-        <Home v-if="$page.frontmatter.home" />
+                <!-- 特殊页 -->
+                <div v-else-if="specialPage()">
+                    <blog-category v-if="$route.params.category" :category="$route.params.category"
+                        :child="$route.params.child" :pageNumber="$route.params.pageNumber || 1"></blog-category>
+                    <blog-articles v-else :pageNumber="$route.params.pageNumber || 1" :filted="$listPages"
+                        :path="`${this.$route.path.split('/')[1]}${this.$route.path.split('/')[1] !== 'page' ? '/' + this.$route.path.split('/')[2] : ''}`"></blog-articles>
+                </div>
 
-        <!-- 特殊页 -->
-        <template v-else-if="specialPage()">
-            <blog-category v-if="$route.params.category" :category="$route.params.category" :child="$route.params.child"
-                :pageNumber="$route.params.pageNumber || 1"></blog-category>
-            <blog-articles v-else :pageNumber="$route.params.pageNumber || 1" :filted="$listPages"
-                :path="`${this.$route.path.split('/')[1]}${this.$route.path.split('/')[1] !== 'page' ? '/' + this.$route.path.split('/')[2] : ''}`"></blog-articles>
-        </template>
-
-        <!-- 文章页 -->
-        <Page v-else :sidebar-items="sidebarItems">
-            <template #top>
-                <slot name="page-top" />
-            </template>
-            <template #bottom>
-                <slot name="page-bottom" />
-            </template>
-        </Page>
+                <!-- 文章页 -->
+                <div :class="{ 'page-left': !isSidebarOpen }" v-else>
+                    <Page :sidebar-items="sidebarItems">
+                        <template #top>
+                            <slot name="page-top" />
+                        </template>
+                        <template #bottom>
+                            <slot name="page-bottom" />
+                        </template>
+                    </Page>
+                </div>
+            </section>
+        </div>
     </div>
 </template>
 
@@ -117,7 +126,6 @@ export default {
         this.$router.afterEach(() => {
             this.isSidebarOpen = false;
         });
-        console.log(this.$page.frontmatter);
     },
 
     methods: {

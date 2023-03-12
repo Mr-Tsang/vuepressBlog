@@ -12,10 +12,11 @@ export default {
       methods: {
             dropDown() {
                   let header = document.querySelector('.navbar')
-                  const main = document.querySelector('.blog-home')
-
-                  header.classList.remove('hide')
-                  window.scrollTo(0, main.clientHeight)
+                  const main = document.querySelector('.blog-home-background')
+                  const homeWrap = document.querySelector(".home-wrap");
+                  header.classList.remove('hide');
+                  homeWrap.classList.remove('home-nav');    
+                  window.scrollTo(0, main.clientHeight - header.clientHeight)
             }
       }
 }

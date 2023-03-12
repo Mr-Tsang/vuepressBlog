@@ -1,31 +1,26 @@
 <template>
-    <transition
-      name="dropdown"
-      @enter="setHeight"
-      @after-enter="unsetHeight"
-      @before-leave="setHeight"
-    >
-      <slot />
-    </transition>
-  </template>
+  <transition name="dropdown" @enter="setHeight" @after-enter="unsetHeight" @before-leave="setHeight">
+    <slot />
+  </transition>
+</template>
   
-  <script>
-  export default {
-    name: 'DropdownTransition',
-  
-    methods: {
-      setHeight (items) {
-        items.style.height = items.scrollHeight + 'px'
-      },
-  
-      unsetHeight (items) {
-        items.style.height = ''
-      }
+<script>
+export default {
+  name: 'DropdownTransition',
+
+  methods: {
+    setHeight(items) {
+      items.style.height = items.scrollHeight + 'px'
+    },
+
+    unsetHeight(items) {
+      items.style.height = ''
     }
   }
-  </script>
+}
+</script>
   
-  <style lang="stylus">
+<style lang="stylus">
   .dropdown-enter, .dropdown-leave-to
     height 0 !important
   
