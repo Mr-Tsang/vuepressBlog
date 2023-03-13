@@ -65,18 +65,20 @@ export default {
     },
     methods: {
         countWords() {
-            const articleContent = document.querySelector('.article-content'),
-                articleImages = document.querySelectorAll('.article-content img'),
-                articleText = articleContent.innerText.replace(
-                    /<(style|script|iframe)[^>]*?>[\s\S]+?<\/\1\s*>/gi,
-                    ''
-                )
-                    .replace(/<[^>]+?>/g, '')
-                    .replace(/\s+/g, '')
-                    .replace(/ /g, '')
-                    .replace(/>/g, '');
-            this.wordCount = articleText.length
-            this.imageCount = articleImages.length
+            this.$nextTick(() => {
+                const articleContent = document.querySelector('.article-content'),
+                    articleImages = document.querySelectorAll('.article-content img'),
+                    articleText = articleContent.innerText.replace(
+                        /<(style|script|iframe)[^>]*?>[\s\S]+?<\/\1\s*>/gi,
+                        ''
+                    )
+                        .replace(/<[^>]+?>/g, '')
+                        .replace(/\s+/g, '')
+                        .replace(/ /g, '')
+                        .replace(/>/g, '');
+                this.wordCount = articleText.length
+                this.imageCount = articleImages.length
+            })
         }
     }
 }
