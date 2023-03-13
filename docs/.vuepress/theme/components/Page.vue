@@ -66,7 +66,7 @@ export default {
     methods: {
         countWords() {
             const articleContent = document.querySelector('.article-content'),
-                articleImages = articleContent.querySelectorAll('.article-content img'),
+                articleImages = document.querySelectorAll('.article-content img'),
                 articleText = articleContent.innerText.replace(
                     /<(style|script|iframe)[^>]*?>[\s\S]+?<\/\1\s*>/gi,
                     ''
@@ -74,8 +74,7 @@ export default {
                     .replace(/<[^>]+?>/g, '')
                     .replace(/\s+/g, '')
                     .replace(/ /g, '')
-                    .replace(/>/g, '')
-
+                    .replace(/>/g, '');
             this.wordCount = articleText.length
             this.imageCount = articleImages.length
         }

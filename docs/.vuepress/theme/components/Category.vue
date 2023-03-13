@@ -26,12 +26,8 @@
 </template>
 
 <script>
-import BlogArticles from './BlogArticles.vue'
 
 export default {
-    components: {
-        BlogArticles
-    },
     props: [
         'category',
         'child',
@@ -79,7 +75,7 @@ export default {
         handlePageChange(pageNumber) {
             this.setPage(pageNumber)
             this.$router.push({
-                path: `/categories/${this.category}${this.child ? '/' + this.child : ''}/page/${pageNumber}`
+                path: `/categories/${this.category}/${pageNumber}`
             })
         },
         formatTime(time) {

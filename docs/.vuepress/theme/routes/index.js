@@ -2,20 +2,27 @@ import Layout from '@theme/layouts/Layout.vue'
 
 const install = (Vue, { router }) => {
     const routes = [
-        '/categories/:category',
-        '/categories/:category/page/:pageNumber',
-        '/categories/:category/:child',
-        '/categories/:category/:child/page/:pageNumber',
-        '/page/:pageNumber',
-        '/*/page/:pageNumber',
+        {
+            url:'/categories/:category/:pageNumber?',
+            name:"category_home"
+        },
+        {
+            url:'/page/:pageNumber',
+            name:"home_page",
+        },
     ]
 
     routes.map(item => {
         router.addRoute({
-            path: item,
+            path: item.url,
             component: Layout,
-            props: true
+            name:item.name,
         })
+    })
+    router.addRoute({
+        path: '/:catchAll(.*)',
+        props: true,
+        component: () => import('../layouts/404.vue')
     })
 }
 

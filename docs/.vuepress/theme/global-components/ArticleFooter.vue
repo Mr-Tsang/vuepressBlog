@@ -2,19 +2,9 @@
     <div class="article-footer">
         <div class="article-category">
             <div class="article-category-custom" v-if="page.frontmatter.categories">
-                <span v-if="!Array.isArray(page.frontmatter.categories)">
-                    <a :href="'/categories/' + page.frontmatter.categories">
+                <span v-for="(category, index) in page.frontmatter.categories" :key="index">
+                    <a :href="`/categories/${category}/1`" v-if="index == 0">
                         <i class="fa fa-folder-o" aria-hidden="true"></i>
-                        {{ page.frontmatter.categories }}
-                    </a>
-                </span>
-                <span v-else v-for="(category, index) in page.frontmatter.categories" :key="index">
-                    <a :href="'/categories/' + category" v-if="index == 0">
-                        <i class="fa fa-folder-o" aria-hidden="true"></i>
-                        {{ category }}
-                    </a>
-                    <a :href="'/categories/' + page.frontmatter.categories[0] + '/' + category" v-else>
-                        <i class="fa fa-angle-double-right" aria-hidden="true"></i>
                         {{ category }}
                     </a>
                 </span>
