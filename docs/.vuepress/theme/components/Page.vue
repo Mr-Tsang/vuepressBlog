@@ -10,14 +10,14 @@
                         <i class="fa fa-calendar" aria-hidden="true"></i>
                         <time>{{ $page.frontmatter.postTime ? $page.frontmatter.postTime.substr(0, 10) : '' }}</time>
                     </div>
-                    <div class="post-count">
+                    <!-- <div class="post-count">
                         <i class="fa fa-file-word-o" aria-hidden="true"></i>
                         <span>{{ wordCount > 1000 ? (wordCount / 1000).toString().match(/^\d+(?:\.\d{0,1})?/) + 'k' :
                             wordCount }}</span>
                         <span>&nbsp;-&nbsp;</span>
                         <i class="fa fa-clock-o" aria-hidden="true"></i>
                         <span>{{ Math.round(wordCount / 500) + Math.round(imageCount * 10 / 60) + 'm' }}</span>
-                    </div>
+                    </div> -->
                     <article-footer :page="$page"></article-footer>
                 </div>
             </header>
@@ -56,30 +56,30 @@ export default {
 
         navigator.userAgent && (this.ifMobile = Reg.test(navigator.userAgent))
 
-        this.countWords()
+        // this.countWords()
     },
-    watch: {
-        $route(to, from) {
-            this.countWords()
-        }
-    },
+    // watch: {
+    //     $route(to, from) {
+    //         this.countWords()
+    //     }
+    // },
     methods: {
-        countWords() {
-            this.$nextTick(() => {
-                const articleContent = document.querySelector('.article-content'),
-                    articleImages = document.querySelectorAll('.article-content img'),
-                    articleText = articleContent.innerText.replace(
-                        /<(style|script|iframe)[^>]*?>[\s\S]+?<\/\1\s*>/gi,
-                        ''
-                    )
-                        .replace(/<[^>]+?>/g, '')
-                        .replace(/\s+/g, '')
-                        .replace(/ /g, '')
-                        .replace(/>/g, '');
-                this.wordCount = articleText.length
-                this.imageCount = articleImages.length
-            })
-        }
+        // countWords() {
+        //     this.$nextTick(() => {
+        //         const articleContent = document.querySelector('.article-content'),
+        //             articleImages = document.querySelectorAll('.article-content img'),
+        //             articleText = articleContent.innerText && articleContent.innerText.replace(
+        //                 /<(style|script|iframe)[^>]*?>[\s\S]+?<\/\1\s*>/gi,
+        //                 ''
+        //             )
+        //                 .replace(/<[^>]+?>/g, '')
+        //                 .replace(/\s+/g, '')
+        //                 .replace(/ /g, '')
+        //                 .replace(/>/g, '');
+        //         this.wordCount = articleText.length
+        //         this.imageCount = articleImages.length
+        //     })
+        // }
     }
 }
 </script>

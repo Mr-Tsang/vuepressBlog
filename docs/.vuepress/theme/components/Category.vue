@@ -8,7 +8,7 @@
                 <el-timeline-item color="#FFA200">
                     <span class="year-label">{{ pageItem[0] }}年</span>
                 </el-timeline-item>
-                <el-timeline-item :timestamp="formatTime(valueItem.frontmatter.postTime)" placement="top"
+                <el-timeline-item :timestamp="valueItem.frontmatter.postTime" placement="top"
                     v-for="(valueItem, valueIndex) in pageItem[1]" :key="valueIndex" :color="color[valueIndex]">
                     <el-card>
                         <a :href="valueItem.regularPath" @click.prevent="$router.push(valueItem.regularPath)">
@@ -49,6 +49,22 @@ export default {
         }
     },
     methods: {
+        insertionSort(arr) {
+            let len = arr.length;
+            let preIndex, temp;
+            if (len < 2) {
+                return arr;
+            }
+            for (let i = 1; i < len; i++) {
+                preIndex = i - 1;
+                temp = arr[i];
+                while (preIndex >= 0 && new Date(arr[preIndex].frontmatter.postTime).getTime() <= new Date(temp.frontmatter.postTime).getTime()) {
+                    arr[preIndex + 1] = arr[preIndex];
+                    preIndex--;
+                }
+                arr[preIndex + 1] = temp;
+            }
+        },
         setPage(pageNumber) {
             let start = (pageNumber - 1) * this.pageSize
             let end = pageNumber * this.pageSize
@@ -57,8 +73,9 @@ export default {
                 this.$categories.get(this.category).children.get(this.child).pages :
                 this.$categories.get(this.category).pages
 
-            this.total = filted.length
-
+            this.total = filted.length;
+            // 排序-倒序
+            this.insertionSort(filted);
             this.pages.clear()
 
             for (let i = start; i < end; i++) {
@@ -73,10 +90,10 @@ export default {
             }
         },
         handlePageChange(pageNumber) {
-            this.setPage(pageNumber)
             this.$router.push({
                 path: `/categories/${this.category}/${pageNumber}`
             })
+            this.setPage(pageNumber)
         },
         formatTime(time) {
             let date = new Date(time);
